@@ -4,7 +4,7 @@ from game import *
 import  random
 import time
 
-
+""" COmmentaire de test """
 
 """ generate a random valid configuration """
 def randomConfiguration():
