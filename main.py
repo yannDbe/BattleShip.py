@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
 from game import *
-import  random
+import socket
+import random
 import time
 
-""" COmmentaire de test """
+hostname = 'localhost'
+port = 1234
 
 """ generate a random valid configuration """
 def randomConfiguration():
@@ -56,14 +58,10 @@ def displayGame(game, player):
     displayConfiguration(game.boats[player], game.shots[otherPlayer], showBoats=True)
     displayConfiguration(game.boats[otherPlayer], game.shots[player], showBoats=False)
 
-""" Play a new random shot """
-def randomNewShot(shots):
-    (x,y) = (random.randint(1,10), random.randint(1,10))
-    while not isANewShot(x,y,shots):
-        (x,y) = (random.randint(1,10), random.randint(1,10))
-    return (x,y)
-
 def main():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((hostname,port))
+
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()
     game = Game(boats1, boats2)
@@ -77,6 +75,9 @@ def main():
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J0) ? "))
+            coordonne = "x: " + x + " y: " + y
+            sock.send(coordonne.encode())
+
         else:
             x_char = input ("quelle colonne (J1) ? ")
             x_char.capitalize()
