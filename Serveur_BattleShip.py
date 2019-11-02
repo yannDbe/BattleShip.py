@@ -4,7 +4,7 @@ import select
 import re
 
 def main():
-    nick = {}
+    joueur = {}
     s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
@@ -19,21 +19,19 @@ def main():
                 s2,addr = s.accept()
                 l.append(s2)
                 for user in l:
-                    user.send(str(addr[0]).encode("utf-8") + b' JOINED THE CHAT \r\n')
+                    user.send(str(addr[0]).encode("utf-8") + b' JOINED THE GAME \r\n')
             else:
                 r = ss.recv(1024)
                 if r == b'':
                     ss.close()
                     l.remove(ss)
                     for user in l:
-                        user.send(b' LEFT THE CHAT \r\n')
-                elif r[0:4] == b'!msg':
+                        user.send(b' LEFT THE GAME \r\n')
+                elif r[0:4] == b'!addshot':
                     for user in l:
                         if user != ss:
-                            r = re.sub('!msg ','',r.decode("utf-8"))
+                            r = re.sub('!addshot ','',r.decode("utf-8"))
                             r = str.encode(r)
-                            user.send(b'> ' + r)
-                elif r[0:4] == b'!nick':
-                    nick[re.sub('!nick ','',r.decode("utf-8"))] = ss
+                            user.send(r)
                                
 main()
