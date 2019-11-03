@@ -1,5 +1,29 @@
-import  random 
+import  random
+import socket
 
+""" Serveur """
+
+def main():
+    s = None
+    s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    #réutilisation du port
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    #désac algo Nagle
+    s.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
+
+    s.bind(('', 1234)) #Sélection du port
+    s.listen(1) #écoute active
+    l.append(s) #Ajout du socket dans la liste l
+
+######### TO-DO #########
+#
+# Attribution d'un numéro de joueur quand connexion
+# Affichage séparé des grilles
+# 
+#
+#
+#
+#
 
 WIDTH = 10 # width of the grid
 
@@ -47,7 +71,7 @@ def gameOver(game):
             if strike:
                 nbStrikes += 1
         print("joueur", player, ":", nbStrikes, "touches")
-        if nbStrikes == 17: 
+        if nbStrikes == 17:
             return player
     return -1
 
@@ -87,9 +111,9 @@ def boat2rec(b):
         return (b.length, 1)
     else:
         return (1, b.length)
-    
+
 """ check if 2 boats overlap """
-def intersect(b1, b2):  
+def intersect(b1, b2):
     (w1,h1) = boat2rec(b1)
     (w2,h2) = boat2rec(b2)
     h_inter = (b1.x <=b2.x and b2.x < b1.x + w1) or \
@@ -110,6 +134,4 @@ def isANewShot(x,y, shots):
         if (xx,yy) == (x,y):
             return False
     return True
-
-
-
+main()
