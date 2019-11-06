@@ -20,6 +20,7 @@ def main():
                 l.append(s2)
                 for user in l:
                     user.send(str(addr[0]).encode("utf-8") + b' JOINED THE GAME \r\n')
+                    print('je suis la')
             else:
                 r = ss.recv(1024)
                 if r == b'':
@@ -32,6 +33,7 @@ def main():
                         if user != ss:
                             r = re.sub('!addshot ','',r.decode("utf-8"))
                             r = str.encode(r)
+                            print(r)
                             user.send(r)
                                
 main()

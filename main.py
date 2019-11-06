@@ -59,7 +59,7 @@ def displayGame(game, player):
     displayConfiguration(game.boats[otherPlayer], game.shots[player], showBoats=False)
 
 def main():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     sock.connect((hostname,port))
 
     boats1 = randomConfiguration()
@@ -75,8 +75,9 @@ def main():
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J0) ? "))
-            coordonne = "x: " + x + " y: " + y
-            sock.send(coordonne.encode())
+            coordonne = "!addshot x: " + str(x) + " y: " + str(y)
+            print(coordonne)
+            sock.send(str(coordonne).encode('utf-8'))
 
         else:
             x_char = input ("quelle colonne (J1) ? ")
