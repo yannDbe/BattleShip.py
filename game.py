@@ -1,29 +1,4 @@
 import  random
-import socket
-
-""" Serveur """
-
-def main():
-    s = None
-    s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-    #réutilisation du port
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    #désac algo Nagle
-    s.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
-
-    s.bind(('', 1234)) #Sélection du port
-    s.listen(1) #écoute active
-    l.append(s) #Ajout du socket dans la liste l
-
-######### TO-DO #########
-#
-# Attribution d'un numéro de joueur quand connexion
-# Affichage séparé des grilles
-# 
-#
-#
-#
-#
 
 WIDTH = 10 # width of the grid
 
@@ -134,4 +109,3 @@ def isANewShot(x,y, shots):
         if (xx,yy) == (x,y):
             return False
     return True
-main()

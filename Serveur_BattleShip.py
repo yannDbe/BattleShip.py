@@ -20,7 +20,7 @@ def main():
                 l.append(s2)
                 for user in l:
                     user.send(str(addr[0]).encode("utf-8") + b' JOINED THE GAME \r\n')
-                    print('je suis la')
+                    print('JOINED THE GAME\n')
             else:
                 r = ss.recv(1024)
                 if r == b'':
@@ -28,12 +28,12 @@ def main():
                     l.remove(ss)
                     for user in l:
                         user.send(b' LEFT THE GAME \r\n')
-                elif r[0:4] == b'!addshot':
+                elif r[0:7] != b'!addshot':
                     for user in l:
+                        print(r)
                         if user != ss:
                             r = re.sub('!addshot ','',r.decode("utf-8"))
                             r = str.encode(r)
-                            print(r)
                             user.send(r)
                                
 main()

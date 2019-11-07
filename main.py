@@ -76,7 +76,6 @@ def main():
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J0) ? "))
             coordonne = "!addshot x: " + str(x) + " y: " + str(y)
-            print(coordonne)
             sock.send(str(coordonne).encode('utf-8'))
 
         else:
