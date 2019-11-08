@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import socket
 import select
-import re
+
 
 def main():
     joueur = {}
@@ -11,17 +11,23 @@ def main():
     s.bind(('',1234))
     s.listen(1)
     l = []
+    l.append(s)
     while True:
         dispo, _, _ = select.select(l + [s], [], [])
-        
+
         for ss in dispo:
             if ss == s:
                 s2,addr = s.accept()
                 l.append(s2)
+                adresse = (str(addr).encode("utf-8"))
                 for user in l:
-                    user.send(str(addr[0]).encode("utf-8") + b' JOINED THE GAME \r\n')
-                    print('JOINED THE GAME\n')
+                    # Permet d'éviter le doublon dans le terminal serveur
+                    if user == s or user == ss:
+                        print("%s vient de rejoindre la partie" % adresse)
+                    else:
+                        pass
             else:
+                print("Passé dans le else")
                 r = ss.recv(1024)
                 if r == b'':
                     ss.close()
@@ -35,5 +41,5 @@ def main():
                             r = re.sub('!addshot ','',r.decode("utf-8"))
                             r = str.encode(r)
                             user.send(r)
-                               
+print("sorti")
 main()

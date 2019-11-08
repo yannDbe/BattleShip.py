@@ -4,8 +4,9 @@ from game import *
 import socket
 import random
 import time
+import sys
 
-hostname = 'localhost'
+hostname = str(sys.argv[1])
 port = 1234
 
 """ generate a random valid configuration """
