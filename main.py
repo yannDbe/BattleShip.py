@@ -80,7 +80,7 @@ def main():
 
         else:
             x_char = input ("quelle colonne (J1) ? ")
-            x_char.capitalize()
+            x_char = x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J1) ? "))
 
