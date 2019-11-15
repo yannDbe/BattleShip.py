@@ -76,13 +76,17 @@ def main():
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J0) ? "))
             coordonne = "!addshot x: " + str(x) + " y: " + str(y)
+            print(coordonne)
             sock.send(str(coordonne).encode('utf-8'))
 
         else:
-            x_char = input ("quelle colonne (J1) ? ")
-            x_char = x_char.capitalize()
-            x = ord(x_char)-ord("A")+1
-            y = int(input ("quelle ligne (J1) ? "))
+            while True:
+                r = sock.recv(1024)
+                if r[0:8] == b'!addshot':
+                    r = r.decode()
+                    x = int(r[12])
+                    y = int(r[17])
+                    break
 
         addShot(game, x, y, currentPlayer)
         print("======================")

@@ -4,7 +4,6 @@ import select
 import re
 
 def main():
-    joueur = {}
     s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
@@ -27,12 +26,8 @@ def main():
                     l.remove(ss)
                     for user in l:
                         user.send(b' LEFT THE GAME \r\n')
-                elif r[0:7] != b'!addshot':
+                elif r[0:8] == b'!addshot':
                     for user in l:
                         if user != ss:
-                            r = re.sub('!addshot ','',r.decode("utf-8"))
-                            r = str.encode(r)
-                            user.send(r)
-                            print(r)
-                               
+                            user.send(r)                              
 main()
