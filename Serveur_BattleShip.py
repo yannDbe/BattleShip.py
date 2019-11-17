@@ -57,13 +57,13 @@ def main():
                     for user in l:
                         if user != ss:
                             user.send(r)
-                if r[0:7] == b'!whoami': #Le premier client à envoyer la commande est le premier joueur
+                if r[0:7] == b'!whoami': #Le joueur un est le joueur dont la demande arrive le plus vite
                     if JoueurUn == False:
                         ss.send(b'!whoami 0')
                         JoueurUn = True
                     elif JoueurUn == True:
                         ss.send(b'!whoami 1')
-                if r[0:7] == b'!boats1': #Envoie la matrice à jour
+                if r[0:7] == b'!boats1': #Envoie la matrice demandée par le client (ici le joueur 1)
                     boats1_data = pickle.dumps(boats1)
                     ss.send(boats1_data)
                 if r[0:7] == b'!boats2':
