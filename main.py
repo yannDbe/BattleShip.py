@@ -44,6 +44,7 @@ def displayConfiguration(boats, shots=[], showBoats=True):
 
 """ display the game viewer by the player"""
 def displayGame(game, player):
+    global otherPlayer
     otherPlayer = (player+1)%2
     displayConfiguration(game.boats[player], game.shots[otherPlayer], showBoats=True)
     displayConfiguration([], game.shots[player], showBoats=False)
@@ -106,7 +107,8 @@ def main():
                     x = int(r[12])
                     y = int(r[17])
                     break
-        addShot(game, x, y, currentPlayer)
+
+        addShot(game, x, y, otherPlayer)
         print("======================")
         displayGame(game, me)
         currentPlayer = (currentPlayer+1)%2
