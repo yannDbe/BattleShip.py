@@ -2,8 +2,24 @@
 import socket
 import select
 import re
+from game import *
+import pickle
+
+def randomConfiguration():
+    boats = []
+    while not isValidConfiguration(boats):
+        boats=[]
+        for i in range(5):
+            x = random.randint(1,10)
+            y = random.randint(1,10)
+            isHorizontal = random.randint(0,1) == 0
+            boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
+    return boats
 
 def main():
+    boats1 = randomConfiguration()
+    boats2 = randomConfiguration()
+
     s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
@@ -11,6 +27,7 @@ def main():
     s.listen(1)
     l = []
     JoueurUn = False
+
     while True:
         dispo, _, _ = select.select(l + [s], [], [])
         
@@ -41,5 +58,11 @@ def main():
                         JoueurUn = True
                     elif JoueurUn == True:
                         ss.send(b'!whoami 1')
+                if r[0:7] == b'!boats1':
+                    boats1_data = pickle.dumps(boats1)
+                    ss.send(boats1_data)
+                if r[0:7] == b'!boats2':
+                    boats2_data = pickle.dumps(boats2)
+                    ss.send(boats2_data)
 
 main()
