@@ -10,6 +10,7 @@ import pickle
 hostname = 'localhost'
 port = 1234
 
+#Affiche la confiuration du joueur
 def displayConfiguration(boats, shots=[], showBoats=True):
     Matrix = [[" " for x in range(WIDTH+1)] for y in range(WIDTH+1)]
     for i  in range(1,WIDTH+1):
@@ -23,7 +24,7 @@ def displayConfiguration(boats, shots=[], showBoats=True):
             for dx in range(w):
                 for dy in range(h):
                     Matrix[b.x+dx][b.y+dy] = str(i)
-
+    #Affiche un X si la cible est touchée ou un O si le tir est raté
     for (x,y,stike) in shots:
         if stike:
             Matrix[x][y] = "X"
@@ -90,14 +91,14 @@ def main():
     displayGame(game, me)
 
     while gameOver(game) == -1:
-
+        #Attend un imput des coordonnées
         if currentPlayer == J0:
             x_char = input ("quelle colonne (J%s) ? " %me)
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J%s) ? " %me))
             coordonne = "!addshot x: " + str(x) + " y: " + str(y)
-            sock.send(str(coordonne).encode('utf-8'))
+            sock.send(str(coordonne).encode('utf-8')) #Envoi les coordonnées du tir au serveur
 
         elif currentPlayer == J1:
             while True:
