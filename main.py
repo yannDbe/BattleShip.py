@@ -4,22 +4,12 @@ from game import *
 import socket
 import random
 import time
-import sys
+import re
 
-hostname = str(sys.argv[1])
+hostname = 'localhost'
 port = 1234
 
 """ generate a random valid configuration """
-def randomConfiguration():
-    boats = []
-    while not isValidConfiguration(boats):
-        boats=[]
-        for i in range(5):
-            x = random.randint(1,10)
-            y = random.randint(1,10)
-            isHorizontal = random.randint(0,1) == 0
-            boats = boats + [Boat(x,y,LENGTHS_REQUIRED[i],isHorizontal)]
-    return boats
 
 def displayConfiguration(boats, shots=[], showBoats=True):
     Matrix = [[" " for x in range(WIDTH+1)] for y in range(WIDTH+1)]
@@ -63,12 +53,51 @@ def main():
     sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     sock.connect((hostname,port))
 
+<<<<<<< HEAD
+    boats1 = "!boats1"
+    boats2 = "!boats2"
+    sock.send(str(boats1).encode('utf-8'))
+    sock.send(str(boats2).encode('utf-8'))
+
+    while True:
+        r = sock.recv(1024)
+        if r == b'!boats1':
+            boats1 = r.decode()
+            print(r)
+            break
+        if r == b'!boats2':
+            boats2 = r.decode()
+            print(r)
+            break
+
+    game = Game(boats1, boats2)
+    displayGame(game, 0)
+    currentPlayer = 0
+=======
+    print("Attente d'un(e) autre joueur(se)")
+    while True:
+        r = sock.recv(1024)
+        if r[0:6] == b'!start':
+            print("C'est partie")
+            break
+
+    sock.send(b'!whoami')
+
+    while True:
+        r = sock.recv(1024)
+        if r[0:7] == b'!whoami':
+            r = re.sub('!whoami ','',r.decode("utf-8"))
+            print(r)
+            currentPlayer = int(r)
+            break
+
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()
     game = Game(boats1, boats2)
     displayGame(game, 0)
 
-    currentPlayer = 0
+
+>>>>>>> 0c6b006fe4092f91a1ac02eb2bfee011e40f4221
     while gameOver(game) == -1:
 
         if currentPlayer == J0:
@@ -77,13 +106,17 @@ def main():
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J0) ? "))
             coordonne = "!addshot x: " + str(x) + " y: " + str(y)
+            print(coordonne)
             sock.send(str(coordonne).encode('utf-8'))
 
-        else:
-            x_char = input ("quelle colonne (J1) ? ")
-            x_char.capitalize()
-            x = ord(x_char)-ord("A")+1
-            y = int(input ("quelle ligne (J1) ? "))
+        elif currentPlayer == J1:
+            while True:
+                r = sock.recv(1024)
+                if r[0:8] == b'!addshot':
+                    r = r.decode()
+                    x = int(r[12])
+                    y = int(r[17])
+                    break
 
         addShot(game, x, y, currentPlayer)
         print("======================")
