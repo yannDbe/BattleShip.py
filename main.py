@@ -10,7 +10,7 @@ import pickle
 hostname = 'localhost'
 port = 1234
 
-#Affiche la confiuration du joueur
+#Affiche la configuration du joueur
 def displayConfiguration(boats, shots=[], showBoats=True):
     Matrix = [[" " for x in range(WIDTH+1)] for y in range(WIDTH+1)]
     for i  in range(1,WIDTH+1):
@@ -45,7 +45,6 @@ def displayConfiguration(boats, shots=[], showBoats=True):
 
 """ display the game viewer by the player"""
 def displayGame(game, player):
-    global otherPlayer
     otherPlayer = (player+1)%2
     displayConfiguration(game.boats[player], game.shots[otherPlayer], showBoats=True)
     displayConfiguration([], game.shots[player], showBoats=False)
@@ -91,7 +90,7 @@ def main():
     displayGame(game, me)
 
     while gameOver(game) == -1:
-        #Attend un imput des coordonnées
+        #Attend un input des coordonnées
         if currentPlayer == J0:
             x_char = input ("quelle colonne (J%s) ? " %me)
             x_char.capitalize()
@@ -109,7 +108,7 @@ def main():
                     y = int(r[17])
                     break
 
-        addShot(game, x, y, otherPlayer)
+        addShot(game, x, y, currentPlayer)
         print("======================")
         displayGame(game, me)
         currentPlayer = (currentPlayer+1)%2
