@@ -4,6 +4,7 @@ from game import *
 import socket
 import random
 import time
+import re
 
 hostname = 'localhost'
 port = 1234
@@ -62,12 +63,29 @@ def main():
     sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     sock.connect((hostname,port))
 
+    print("Attente d'un(e) autre joueur(se)")
+    while True:
+        r = sock.recv(1024)
+        if r[0:6] == b'!start':
+            print("C'est partie")
+            break
+
+    sock.send(b'!whoami')
+
+    while True:
+        r = sock.recv(1024)
+        if r[0:7] == b'!whoami':
+            r = re.sub('!whoami ','',r.decode("utf-8"))
+            print(r)
+            currentPlayer = int(r)
+            break
+
     boats1 = randomConfiguration()
     boats2 = randomConfiguration()
     game = Game(boats1, boats2)
     displayGame(game, 0)
 
-    currentPlayer = 0
+
     while gameOver(game) == -1:
 
         if currentPlayer == J0:
@@ -79,7 +97,7 @@ def main():
             print(coordonne)
             sock.send(str(coordonne).encode('utf-8'))
 
-        else:
+        elif currentPlayer == J1:
             while True:
                 r = sock.recv(1024)
                 if r[0:8] == b'!addshot':

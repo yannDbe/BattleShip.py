@@ -10,6 +10,7 @@ def main():
     s.bind(('',1234))
     s.listen(1)
     l = []
+    JoueurUn = False
     while True:
         dispo, _, _ = select.select(l + [s], [], [])
         
@@ -19,6 +20,10 @@ def main():
                 l.append(s2)
                 adresse = (str(addr).encode("utf-8"))
                 print('%s JOINED THE GAME' % adresse)
+                if len(l) == 2:
+                    for user in l:
+                        user.send(b'!start')
+                    
             else:
                 r = ss.recv(1024)
                 if r == b'':
@@ -26,8 +31,15 @@ def main():
                     l.remove(ss)
                     for user in l:
                         user.send(b' LEFT THE GAME \r\n')
-                elif r[0:8] == b'!addshot':
+                if r[0:8] == b'!addshot':
                     for user in l:
                         if user != ss:
-                            user.send(r)                              
+                            user.send(r)
+                if r[0:7] == b'!whoami':
+                    if JoueurUn == False:
+                        ss.send(b'!whoami 0')
+                        JoueurUn = True
+                    elif JoueurUn == True:
+                        ss.send(b'!whoami 1')
+
 main()
