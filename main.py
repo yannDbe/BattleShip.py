@@ -96,7 +96,7 @@ def main():
             x_char.capitalize()
             x = ord(x_char)-ord("A")+1
             y = int(input ("quelle ligne (J%s) ? " %me))
-            coordonne = "!addshot x: " + str(x) + " y: " + str(y)
+            coordonne = "!addshot x: " + str(x - 1) + " y: " + str(y - 1)
             sock.send(str(coordonne).encode('utf-8')) #Envoi les coordonnées du tir au serveur
 
         elif currentPlayer == J1:
@@ -104,8 +104,8 @@ def main():
                 r = sock.recv(1024)
                 if r[0:8] == b'!addshot':
                     r = r.decode()
-                    x = int(r[12])
-                    y = int(r[17])
+                    x = int(r[12]) + 1
+                    y = int(r[17]) + 1
                     break
 
         addShot(game, x, y, currentPlayer)
